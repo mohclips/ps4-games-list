@@ -1,0 +1,72 @@
+<html>
+<head>
+ 
+<style>
+  body, h1, h2, h3, h4, h5, h6 {
+    font-family: "Open Sans",Helvetica,Roboto,Arial,sans-serif;
+    color: rgba(255,255,255,.9);
+    background-color: black;
+  }
+
+.full-width {
+    width: 100%;
+    background: #263754;
+  }
+  .wrap {
+    width: 80%;
+    max-width: 24em;
+    margin: 0 auto;
+    padding: 0.25em 0.625em;
+  }
+
+</style>
+  
+    <script type="text/javascript" language="javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>        
+
+    <script>
+      (function() {
+        var myjson = "games.json";
+
+        // TEMPLATE
+        const Item = ({ name, url, descr, media, date }) => `
+  <h2 class="full-width">
+    <div class="wrap">${name}</div>
+  </h2>
+    <div class="image">
+      <img src="${url}" /><img width=640 src="${media}" />
+    </div>
+    <p class="rdate">Released ${date}</p>
+    <p class="descr">${descr}</p>
+  </a>
+`;
+// END TEMPLATE
+
+        $.getJSON( myjson )
+          .fail(function( jqxhr, textStatus, error ) {
+            var err = textStatus + ", " + error;
+            console.log( "Request Failed: " + err );
+          })
+          .done(function( json ) {
+            
+            $.each( json, function( i, g ) {
+
+              //console.log(g); 
+              $('.games-list').append([
+              { url: g.url, name: g.name, descr: g.descr, media: g.media[0].url, date: g.releaseDate }
+              ].map(Item).join(''));
+              
+            })
+
+          })
+        ;
+
+
+      })();
+      </script>
+</head>
+<body>
+  <h1>Free PS4 Games</h1>
+  For "Everyone" and "Everyone 10+" rated games.
+  <div class=games-list></div>
+</body>
+</html>
